@@ -556,7 +556,9 @@ function playground_text(playground, hidden = true) {
 (function chapterNavigation() {
     document.addEventListener('keydown', function (e) {
         if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) { return; }
-        if (window.search && window.search.hasFocus()) { return; }
+        if (e.target.closest('input, textarea, [contenteditable]')) {
+            return;
+        }
 
         switch (e.key) {
             case 'ArrowRight':

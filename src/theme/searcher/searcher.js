@@ -1,10 +1,7 @@
 "use strict";
 window.search = window.search || {};
-(function search(search) {
+(function search() {
     // Search functionality
-    //
-    // You can use !hasFocus() to prevent keyhandling in your key
-    // event handlers while the user is typing their search.
 
     if (!Mark || !elasticlunr) {
         return;
@@ -316,7 +313,10 @@ window.search = window.search || {};
     
     // Eventhandler for keyevents on `document`
     function globalKeyHandler(e) {
-        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.target.type === 'textarea' || e.target.type === 'text') { return; }
+        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) { return; }
+        if (!hasFocus() && e.target.closest('input, textarea, [contenteditable]')) {
+            return;
+        }
 
         if (e.keyCode === ESCAPE_KEYCODE) {
             e.preventDefault();
@@ -477,7 +477,4 @@ window.search = window.search || {};
             script.onload = () => init(window.search);
             document.head.appendChild(script);
         });
-
-    // Exported functions
-    search.hasFocus = hasFocus;
-})(window.search);
+})();
